@@ -439,7 +439,7 @@
 																									</td>
 																								</tr>
 																								<tr>
-																									<td class="arial12LGrayBold" width="20%">&nbsp;Ready for 10 - 12 hrs Training&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" width="20%">&nbsp;Ready for 4 - 6 hrs Training&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
 																									<td class="verdana11Gray" colspan="5">
 																									<?php
 																										echo $arr_status[$info['is_ready_training']];

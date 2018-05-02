@@ -813,7 +813,7 @@
 																									</td>
 																								</tr>
 																								<tr>
-																									<td class="arial12LGrayBold" width="20%">&nbsp;Ready for 10 � 12 hrs Training&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" width="20%">&nbsp;Ready for 4 - 6 hrs Training&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
 																									<td class="arial12LGray" colspan="5">
 																									<?php foreach($arr_status as $k_status=>$v_status){?>
 																											<input type="radio" name="is_ready_training" id="is_ready_training" value="<?php echo $k_status;?>" class="required" <?php echo ($info['is_ready_training'] == $k_status ? 'checked="checked"' : '');?> >&nbsp;<?php echo $v_status;?>&nbsp;
