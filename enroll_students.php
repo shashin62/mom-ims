@@ -1,4 +1,6 @@
 <?php	
+
+
 	include('includes/application_top.php');
 
 	check_valid_type('CENTRE');
@@ -333,9 +335,9 @@
 
 				change_student_status($student_id, '1');
 
-				tep_redirect(tep_href_link(FILENAME_STUDENT_PAYMENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . "int_id=" . $student_id));
-
 				$msg = 'added';
+				//tep_redirect(tep_href_link(FILENAME_STUDENT_PAYMENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . "int_id=" . $student_id));
+                                tep_redirect(tep_href_link(FILENAME_ENROLL_STUDENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . 'msg=' . $msg));
 			break;
 
 			case 'edit':
@@ -355,7 +357,7 @@
 				change_student_status($student_id, '1');
 
 				if($payment_redirect == true){
-					tep_redirect(tep_href_link(FILENAME_STUDENT_PAYMENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . "int_id=" . $student_id));
+					//tep_redirect(tep_href_link(FILENAME_STUDENT_PAYMENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . "int_id=" . $student_id));
 				}
 
 				$msg = 'edited';
@@ -777,9 +779,9 @@
 																									</td>
 																								</tr>
 																								<tr>
-																									<td class="arial12LGrayBold" align="right" width="20%">&nbsp;Father Occupation&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="20%">&nbsp;Father Occupation&nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td class="arial12LGrayBold">
-																										<select name="student_father_occupation" id="student_father_occupation" class="required">
+																										<select name="student_father_occupation" id="student_father_occupation" class="">
 																											<option value="">Please choose</option>
 																											<?php foreach($occupation_array as $k_occupation=>$v_occupation){?>
 																											<option value="<?php echo $k_occupation;?>" <?php echo($info['student_father_occupation'] == $k_occupation? 'selected="selected"' : '');?>><?php echo $v_occupation;?></option>
@@ -826,9 +828,9 @@
 																									</td>
 																								</tr>
 																								<tr>
-																									<td class="arial12LGrayBold" align="right" width="20%">&nbsp;Mother Occupation&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="20%">&nbsp;Mother Occupation&nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td class="arial12LGrayBold">
-																										<select name="student_mother_occupation" id="student_mother_occupation" class="required">
+																										<select name="student_mother_occupation" id="student_mother_occupation" class="">
 																											<option value="">Please choose</option>
 																											<?php foreach($occupation_array as $k_occupation=>$v_occupation){?>
 																											<option value="<?php echo $k_occupation;?>" <?php echo($info['student_mother_occupation'] == $k_occupation? 'selected="selected"' : '');?>><?php echo $v_occupation;?></option>
@@ -1263,28 +1265,28 @@
 																									</td>
 																								</tr>
 																								<tr>
-																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Stream &nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Stream &nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td>
-																										<input type="text" name="student_stream" id="student_stream" maxlength="255" value="<?php echo  ($dupError ? $_POST['student_stream'] : $info['student_stream']) ?>" class="required">
+																										<input type="text" name="student_stream" id="student_stream" maxlength="255" value="<?php echo  ($dupError ? $_POST['student_stream'] : $info['student_stream']) ?>" class="">
 																									</td>
-																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Institute Name &nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Institute Name &nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td>
-																										<input type="text" name="student_inst_name" id="student_inst_name" maxlength="255" value="<?php echo  ($dupError ? $_POST['student_inst_name'] : $info['student_inst_name']) ?>" class="required">
+																										<input type="text" name="student_inst_name" id="student_inst_name" maxlength="255" value="<?php echo  ($dupError ? $_POST['student_inst_name'] : $info['student_inst_name']) ?>" class="">
 																									</td>
-																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Year of Passing &nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Year of Passing &nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td>
-																										<input type="text" name="student_passing_year" id="student_passing_year" value="<?php echo  ($dupError ? $_POST['student_passing_year'] : $info['student_passing_year']) ?>" class="required">
+																										<input type="text" name="student_passing_year" id="student_passing_year" value="<?php echo  ($dupError ? $_POST['student_passing_year'] : $info['student_passing_year']) ?>" class="">
 																									</td>
 																								</tr>
 																								<tr>
 																									
-																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Marks Obtained &nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Marks Obtained &nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td>
-																										<input type="text" name="student_marks" id="student_marks" value="<?php echo  ($dupError ? $_POST['student_marks'] : $info['student_marks']) ?>" class="required">
+																										<input type="text" name="student_marks" id="student_marks" value="<?php echo  ($dupError ? $_POST['student_marks'] : $info['student_marks']) ?>" class="">
 																									</td>
-																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Other Skills &nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="13%">&nbsp;Other Skills &nbsp;<!--<font color="#ff0000">*</font>&nbsp;-->:</td>
 																									<td>
-																										<input type="text" name="student_other_skill" id="student_other_skill" value="<?php echo  ($dupError ? $_POST['student_other_skill'] : $info['student_other_skill']) ?>" class="required">
+																										<input type="text" name="student_other_skill" id="student_other_skill" value="<?php echo  ($dupError ? $_POST['student_other_skill'] : $info['student_other_skill']) ?>" class="">
 																									</td>
 																								</tr>
 																							</table>
