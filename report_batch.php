@@ -1117,7 +1117,223 @@
 					$rows++;
 				}
 			}
+		}else if($_POST['form_action'] == 'moma_report'){
+			$isds_cols_array = array('S. No.', 'center', 'Batch No/Code', 'Batch Disctrict', 'sector', 'Course Name', 'Course Type Residential/Non Residential', 'Batch Start Date', 'Batch End Date', 'Batch Status Completed/ In Progress', 'Candidate First Name', 'Candidate Last Name', 'Date of Birth (DD-MM-YYYY)', 'Father First Name', 'Father Last Name', 'Aadhaar Enrollment Number', 'Aadhaar Number', 'Gender', 'Category SC/ST/BC/OTHERS', 'Physical Disability (Y/N)', 'Religion', 'Candidate State', 'Candidate District', 'Candidate Pin Code', 'Mobile No of Candidate', 'Pre Training Status Employed (Y/N)', 'Total Work Experience', 'Prior Training Earning', 'Education Qualification', 'Total Days Attended', '% Day of Attended','Certified (Y/N)', 'Certification Date (DD-MM-YYYY)', 'Certificate name', 'Certificate no', 'Test Date', 'Testing Agency', 'Assessor', 'Certifying Agency', 'Placement Status (Working/Dropout)', 'Placement Type', 'Letter of Offer/ Declaration Collected (Y/N)', 'Date of Joining (DD-MM-YYYY)', 'Employer Name Or Self Employed', 'Employer Contact Person Name', 'Employer Contact Person Designation', 'Employer Contact No', 'Location of employer State', 'Location of employer District', 'Gross Salary', 'Candidate Bank Name', 'Candidate Branch Address', 'Candidate Ifsc Code', 'Candidate Bank Account Number', 'MOMA Stage 1 uploaded (Y/N)','MOMA Stage 2 uploaded (Y/N)','CED Portal Stage 1','CED Portal Stage 1 Date','CED Portal Stage 2','CED Portal Stage 2 Date');
+
+			$rows = 1;
+			$cnt_cols = 0;
+			$alphabet = 'A';
+
+			foreach($isds_cols_array as $column){
+				$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $column);
+				$alphabet++;
+				$cnt_cols++;
 		}
+
+			$objPHPExcel->getActiveSheet()->getStyle('A1:' . $alphabet . '1')->applyFromArray($heading_bold);
+			
+			$batch_query_raw = " select b.batch_id, b.centre_id, b.section_id, b.course_id, b.batch_title, batch_start_date, batch_end_date, handholding_end_date, test_allotted_date, b.test_agency, b.batch_status, cn.centre_name, s.section_name, c.course_name, c.course_code, c.course_duration, d.district_name from " . TABLE_BATCHES . " b LEFT JOIN ". TABLE_DISTRICTS . " d  ON (d.district_id = b.district_id)  LEFT JOIN  " . TABLE_CENTRES . " cn ON (cn.centre_id = b.centre_id), " . TABLE_SECTIONS . " s, " . TABLE_COURSES . " c where b.course_id = c.course_id and s.section_id = b.section_id ";
+
+			if($_POST['batch_id'] != '')$batch_query_raw .= " and b.batch_id = '" . $_POST['batch_id'] . "'";
+
+			if($_SESSION['sess_adm_type'] != 'ADMIN'){
+				$batch_query_raw .= " and b.centre_id = '" . $_SESSION['sess_centre_id'] . "'";
+			}else{
+				if($_POST['centre_id'] != '')$batch_query_raw .= " and b.centre_id = '" . $_POST['centre_id'] . "'";
+			}
+
+			if($_POST['course_id'] != '')$batch_query_raw .= " and b.course_id = '" . $_POST['course_id'] . "'";
+			if($_POST['section_id'] != '')$batch_query_raw .= " and b.section_id = '" . $_POST['section_id'] . "'";
+
+			if($_POST['district_id'] != '')$batch_query_raw .= " and b.district_id = '" . tep_db_input($_POST['district_id']) . "'";
+
+			$batch_query_raw .= "  order by b.batch_title";
+
+			$batch_query = tep_db_query($batch_query_raw);
+
+
+			$sr_no = 1;
+			$rows = 2;
+			
+			while($batch = tep_db_fetch_array($batch_query)){
+				$students_query_raw = "select student_id, course_id, course_option, stage1_uploaded, stage2_uploaded, student_full_name, student_surname, student_dob, student_father_name,father_surname, is_student_aadhar_card, student_aadhar_card, student_gender, student_category, is_physical_disability, student_religion, student_state, student_district, student_pincode, student_mobile, is_unemployed, student_total_exp, student_income, student_qualification, is_certificate_recieved, certificate_date, certificate_name, certificate_number, test_allotted_date, test_agency, assessor_name, certificate_body_name, student_bank_name, student_branch, bank_ifsc_code, student_account_number, stage1_ced_portal, stage1_ced_portal_date, stage2_ced_portal, stage2_ced_portal_date from  " . TABLE_STUDENTS . " where batch_id = '" . $batch['batch_id'] . "'";
+
+				$students_query = tep_db_query($students_query_raw);
+
+				while($students = tep_db_fetch_array($students_query)){
+
+					$course_query = "select course_duration from " . TABLE_COURSES . " where course_id = '" . $students['course_id'] . "'";
+					$course_query = tep_db_query($course_query);
+					$courses = tep_db_fetch_array($course_query);
+
+					$placement_query = "select p.company_id ,job_status, placement_type, offer_letter_collected, job_joining_date, gross_salary, co.district_id, d.state, d.	district_name , co.company_name, co.company_contact_person, co.company_contact_person_designation, co.company_phone_std, co.company_phone, co.company_email, co.company_address, co.company_pincode from " . TABLE_PLACEMENTS . " p LEFT JOIN ". TABLE_COMPANIES . " co ON (co.company_id = p.company_id)  LEFT JOIN ". TABLE_DISTRICTS . " d ON (d.district_id = co.district_id) where student_id = ".$students['student_id']." and job_status = 'WORKING'";
+					$placement_query = tep_db_query($placement_query);
+
+					$placements = tep_db_fetch_array($placement_query);
+
+					$student_abs_query = tep_db_query("select count(attendance_id) as count from " . TABLE_ATTENDANCE . " where student_id = '" . $students['student_id'] . "' and attendance = 'ABSENT'");
+					$student_abs = tep_db_fetch_array($student_abs_query);
+
+					$student_attend_query = tep_db_query("select count(attendance_id) as count from " . TABLE_ATTENDANCE . " where student_id = '" . $students['student_id'] . "' and attendance = 'ATTEND'");
+					$student_attend = tep_db_fetch_array($student_attend_query);
+
+					$day_attended = 0;
+					if((int)$student_abs['count'] > 0 || (int)$student_attend['count'] > 0){
+						$day_attended = (($student_attend['count'] * 100) / ($student_abs['count'] + $student_attend['count']));
+					}
+					
+					/*$student_attend_query = tep_db_query("select count(attendance_id) as count_attend from " . TABLE_ATTENDANCE . " where student_id = " . $students['student_id'] . " and attendance = 'ATTEND'");
+
+					$student_attend = tep_db_fetch_array($student_attend_query);*/
+					$course_duration = $courses['course_duration'];
+					//$day_attended = (($student_attend['count_attend']*100)/$course_duration);
+					//(A/(B*100))
+
+					$faculty_query_raw = " select * from " . TABLE_FACULTIES . " where course_id = '" . $students['course_id'] . "'";
+					$faculty_query = tep_db_query($faculty_query_raw);
+
+					$faculty = tep_db_fetch_array($faculty_query);
+
+					/*$handholding_query_raw = "select handholding_id, current_company_name,current_contact_person_name,current_contact_person_designation, current_company_phone,gross_salary, gross_salary from " . TABLE_HANDHOLDING. " where student_id = '" . $students['student_id'] . "'";
+					$handholding_query = tep_db_query($handholding_query_raw);
+					$handholding = tep_db_fetch_array($handholding_query);*/
+
+					$alphabet = 'A';
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $sr_no);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $batch['centre_name']);
+					$alphabet++;
+
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $batch['batch_title']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $batch['district_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $batch['section_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $batch['course_name']);
+					$alphabet++;
+						
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $arr_course_option[$students['course_option']]);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($batch['batch_start_date']));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($batch['batch_end_date']));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $arr_batch_status[$batch['batch_status']]);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_full_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_surname']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($students['student_dob']));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_father_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['father_surname']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['is_student_aadhar_card'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_aadhar_card']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $arr_gender[$students['student_gender']]);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $arr_category[$students['student_category']]);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['is_physical_disability'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_religion']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_state']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_district']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_pincode']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_mobile']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['is_unemployed'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_total_exp']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_income']);
+					$alphabet++;
+
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['student_qualification'] == 'OTHERS' ? $students['student_qualification'] : $arr_qualification[$students['student_qualification']]));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $student_attend['count']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $day_attended);
+					$alphabet++;
+
+					
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['is_certificate_recieved'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($students['certificate_date']));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['certificate_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['certificate_number']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($students['test_allotted_date']));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['test_agency']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['assessor_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['certificate_body_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['job_status']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['placement_type']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($placements['offer_letter_collected'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($placements['job_joining_date']));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['company_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['company_contact_person']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['company_contact_person_designation']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['company_phone_std'] . ' ' . $placements['company_phone']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['state']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['district_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $placements['gross_salary']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_bank_name']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_branch']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['bank_ifsc_code']);
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, $students['student_account_number']);
+					$alphabet++;
+
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['stage1_uploaded'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['stage2_uploaded'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['stage1_ced_portal'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($students['stage1_ced_portal_date']));
+					$alphabet++;
+					
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['stage2_ced_portal'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($students['stage2_ced_portal_date']));
+
+					$sr_no++;
+					$rows++;
+				}
+			}
+                }
 
 		$objPHPExcel->setActiveSheetIndex(0);
 
@@ -1198,6 +1414,11 @@
 
 			function twenty_col_report(){
 				document.frmSigleBatch.form_action.value = '20_col_report';
+				document.frmSigleBatch.submit();
+			}
+                        
+                        function moma_report(){
+				document.frmSigleBatch.form_action.value = 'moma_report';
 				document.frmSigleBatch.submit();
 			}
 		//-->
@@ -1344,11 +1565,13 @@
 																<td><img src="<?php echo DIR_WS_IMAGES ?>pixel.gif" height="10"></td>
 															</tr>
 															<tr>
-																<td>&nbsp;<button type="button" value="Batch Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="batch_info_report();">Batch Report</button>
+																<td width="25%">&nbsp;<button type="button" value="Batch Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="batch_info_report();">Batch Report</button>
+                                                                                                                                    
+                                                                                                                                <td width="25%">&nbsp;<button type="button" value="DSCW Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="moma_report();">MOMA Report</button></td>
+                                                                                                                                    
+																<td width="25%">&nbsp;<button type="button" value="Batch Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="detail_project_report();">Detail Project Report</button>
 
-																<td>&nbsp;<button type="button" value="Batch Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="detail_project_report();">Detail Project Report</button>
-
-																<td>&nbsp;<button type="button" value="20 Column Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="twenty_col_report();">20 Column Report</button>
+																<td width="25%">&nbsp;<button type="button" value="20 Column Report" name="cmdExcel" id="cmdExcel" class="groovybutton" onclick="twenty_col_report();">20 Column Report</button>
 																
 															</tr>
 														</table>
