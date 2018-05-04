@@ -175,7 +175,7 @@
 		$is_ready_training = tep_db_prepare_input($_POST['is_ready_training']);
 		$is_ready_migrate_training = tep_db_prepare_input($_POST['is_ready_migrate_training']);
 
-		$fees_amount = tep_db_prepare_input($_POST['fees_amount']);
+		/*$fees_amount = tep_db_prepare_input($_POST['fees_amount']);
 		$fees_collected_date = tep_db_prepare_input($_POST['fees_collected_date']);
 		$fees_payment_type = tep_db_prepare_input($_POST['fees_payment_type']);
 		$is_fees_deposit = tep_db_prepare_input($_POST['is_fees_deposit']);
@@ -184,15 +184,15 @@
 		$fees_deposit_cleared = tep_db_prepare_input($_POST['fees_deposit_cleared']);
 
 		$is_due_balance = tep_db_prepare_input($_POST['is_due_balance']);
-		$due_balance = tep_db_prepare_input($_POST['due_balance']);
+		$due_balance = tep_db_prepare_input($_POST['due_balance']);*/
 
 		$student_remark = tep_db_prepare_input($_POST['student_remark']);
 
 		$course_option = tep_db_prepare_input($_POST['course_option']);
 
 		$student_dob = input_valid_date($student_dob);
-		$fees_deposit_date = input_valid_date($fees_deposit_date);
-		$fees_collected_date = input_valid_date($fees_collected_date);
+		/*$fees_deposit_date = input_valid_date($fees_deposit_date);
+		$fees_collected_date = input_valid_date($fees_collected_date);*/
 
 		$student_age = (time() >= strtotime($student_dob) ? round((time()-strtotime($student_dob))/(60*60*24*365)) : 0);
 
@@ -296,7 +296,7 @@
 			'is_ready_training' => $is_ready_training,
 			'is_ready_migrate_training' => $is_ready_migrate_training,
 
-			'fees_amount' => $fees_amount,
+			/*'fees_amount' => $fees_amount,
 			'fees_collected_date' => $fees_collected_date,
 			'fees_payment_type' => $fees_payment_type,
 			'is_fees_deposit' => $is_fees_deposit,
@@ -304,7 +304,7 @@
 			'fees_deposit_bank' => $fees_deposit_bank,
 			'fees_deposit_cleared' => $fees_deposit_cleared,
 			'is_due_balance' => $is_due_balance,
-			'due_balance' => $due_balance,
+			'due_balance' => $due_balance,*/
 			'student_remark' => $student_remark
 		);
 
@@ -1127,7 +1127,7 @@
 																									<td>
 																										<input type="text" name="student_total_family_yincome" id="student_total_family_yincome" maxlength="50" value="<?php echo  ($dupError ? $_POST['student_total_family_yincome'] : ($info['student_total_family_yincome'] != '' ? $info['student_total_family_yincome'] : '0')) ?>" class="required" style="width:100px;;">
 																									</td>
-																									<td class="arial12LGrayBold" align="right" width="10%">&nbsp;Source of Income &nbsp;:</td>
+																									<td class="arial12LGrayBold" align="right" width="10%">&nbsp;Source of Income &nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
 																									<td>
 																										<input type="text" name="student_family_source_income" id="student_family_source_income" maxlength="100" value="<?php echo  ($dupError ? $_POST['student_family_source_income'] : ($info['student_family_source_income'] != '' ? $info['student_family_source_income'] : '')) ?>" class="required" style="width:100px;;">
 																									</td>
@@ -1439,7 +1439,7 @@
 																					toggle_element('is_bank_account', 'bank_account');
 																				//-->
 																				</script>
-																				<tr>
+																				<!--<tr>
 																					<td class="arial14LGrayBold" colspan="2">
 																						<fieldset>
 																							<legend>Fees</legend>
@@ -1504,12 +1504,10 @@
 																							</table>
 																						</fieldset>
 																					</td>
-																				</tr>
+																				</tr>-->
 																				<script type="text/javascript">
-																				<!--
-																					toggle_element('is_fees_deposit', 'fees_deposit');
-																					toggle_element('is_due_balance', 'due_balance');
-																				//-->
+																					//toggle_element('is_fees_deposit', 'fees_deposit');
+																					//toggle_element('is_due_balance', 'due_balance');
 																				</script>
 																				<tr>
 																					<td class="arial14LGrayBold" colspan="2">
@@ -2176,7 +2174,7 @@
 																						</fieldset>
 																					</td>
 																				</tr>
-																				<tr>
+																				<!--<tr>
 																					<td class="arial14LGrayBold" colspan="2">
 																						<fieldset>
 																							<legend>Fees&nbsp;(&nbsp;<a href="<?php echo tep_href_link(CURRENT_PAGE, tep_get_all_get_params(array('msg', 'actionType')) . '&actionType=edit_preview#fees'); ?>">Edit</a>&nbsp;)&nbsp;</legend>
@@ -2230,7 +2228,7 @@
 																							</table>
 																						</fieldset>
 																					</td>
-																				</tr>
+																				</tr>-->
 																				<?php //if(is_array($arr_uploaded_files) && count($arr_uploaded_files)){ ?>
 																				<!-- <tr>
 																					<td class="arial14LGrayBold" colspan="2">
