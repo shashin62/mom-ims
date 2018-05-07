@@ -62,6 +62,21 @@
 		}
 	}
 
+        function addDocsInTable($student_id,$arr_documents){
+            if(is_array($arr_documents) && count($arr_documents) && $student_id != ''){
+			foreach($arr_documents as $document_title => $documents){
+				$arr_db_values = array(
+					'student_id' => $student_id,
+					'document' => $documents['filename'],
+					'document_type' => $documents['document_type'],
+					'document_title' => $documents['document_title']
+				);
+
+				tep_db_perform(TABLE_STUDENT_DOCUMENTS, $arr_db_values);
+			}
+                    }
+                    return true;
+        }
 	include_once("ckeditor/ckeditor.php");
 	
 	if(isset($action) && tep_not_null($action))
@@ -334,7 +349,7 @@
 				$arr_documents = upload_documents($student_id);
 
 				change_student_status($student_id, '1');
-
+                                addDocsInTable($student_id,$arr_documents);
 				$msg = 'added';
 				//tep_redirect(tep_href_link(FILENAME_STUDENT_PAYMENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . "int_id=" . $student_id));
                                 tep_redirect(tep_href_link(FILENAME_ENROLL_STUDENTS, tep_get_all_get_params(array('msg','int_id','actionType')) . 'msg=' . $msg));
