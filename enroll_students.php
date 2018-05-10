@@ -2382,6 +2382,7 @@
 																						<li><a href="<?php echo tep_href_link(FILENAME_PLACEMENT_ALLOWANCE,tep_get_all_get_params(array('msg','actionType','int_id','stud_id'))."actionType=edit&int_id=".$listing['student_id']); ?>">Update Placement Allowance</a></li>
 																						<li><a href="<?php echo tep_href_link(FILENAME_NSDC_UPLOAD_STATUS,tep_get_all_get_params(array('msg','actionType','int_id','stud_id'))."actionType=edit&int_id=".$listing['student_id']); ?>">Update NSDC Upload Status</a></li>
 																						<li><a href="<?php echo tep_href_link(FILENAME_CED_PORTAL_STATUS,tep_get_all_get_params(array('msg','actionType','int_id','stud_id'))."actionType=edit&int_id=".$listing['student_id']); ?>">Update CED Portal Status</a></li>
+																						<li><a href="<?php echo tep_href_link(FILENAME_MINISTRY_STATUS,tep_get_all_get_params(array('msg','actionType','int_id','stud_id'))."actionType=edit&int_id=".$listing['student_id']); ?>">Update Ministry Status</a></li>
 																						<li><a href="<?php echo tep_href_link(FILENAME_VIEW_STUDENT_PAYMENTS,tep_get_all_get_params(array('msg','actionType','int_id','stud_id'))."int_id=".$listing['student_id']); ?>">View Payments</a></li>
 																					</ul>
 																				</div>

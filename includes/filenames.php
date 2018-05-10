@@ -72,4 +72,8 @@
 	define('FILENAME_ADD_ASSESSMENT_PAYMENT', 'add_assessment_payment.php');
 	define('FILENAME_ASSESMENT_PAYMENTS', 'assesment_payments.php');
 	define('FILENAME_RECEIPT_PRINT', 'receipt_print.php');
+
+	define('FILENAME_MINISTRY_STATUS', 'ministry_status.php');
+
+
 ?>
