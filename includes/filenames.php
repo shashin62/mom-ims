@@ -74,6 +74,7 @@
 	define('FILENAME_RECEIPT_PRINT', 'receipt_print.php');
 
 	define('FILENAME_MINISTRY_STATUS', 'ministry_status.php');
+	define('FILENAME_STIPEND_ALLOWANCE', 'stipend_allowance.php');
 
 
 ?>
