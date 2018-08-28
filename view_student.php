@@ -192,13 +192,16 @@
 																									<td class="arial12LGrayBold" align="right" width="5%">&nbsp;District&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
 																									<td width="10%"class="verdana11Gray">
 																									<?php
+                                                                                                                                                                                                                /*
 																										$disctrict_query_raw="SELECT district_name FROM districts  WHERE district_id ='16'";
 																										$course=mysql_query($disctrict_query_raw);
 																										$qury=mysql_fetch_array($course);
 																										 
-																										 echo $qury['district_name'];
+																										echo $qury['district_name'];
+                                                                                                                                                                                                                */
 																										 												
-																										?>
+                                                                                                                                                                                                        ?>
+                                                                                                                                                                                                        <?php echo $info['student_district']; ?>
 																									</td>
 																									<td class="arial12LGrayBold" align="right" width="8%">&nbsp;Taluka&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
 																									<td class="verdana11Gray">
@@ -587,8 +590,8 @@
 																								<?php if($info['is_bank_account']){ ?> 
 																								<tr>
 																									<td class="arial12LGrayBold" width="13%" align="right">&nbsp;Name of the Bank&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
-																									<td width="10%">
-																										
+																									<td width="10%" class="verdana11Gray">
+																										<?php echo  $info['student_bank_name']; ?>
 																									</td>
 																									<td class="arial12LGrayBold" align="right" width="8%">&nbsp;Branch&nbsp;<font color="#ff0000">*</font>&nbsp;:</td>
 																									<td width="15%" class="verdana11Gray">
