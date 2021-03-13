@@ -406,6 +406,10 @@ function get_alpha_pos($alpha){
  function change_student_status($student_id, $student_status) {
 	tep_db_query("update " . TABLE_STUDENTS . " set student_status = '" . tep_db_input($student_status) . "' where student_id = '" . $student_id . "' limit 1");
  }
+ 
+  function change_student_moma_status($student_id, $student_status) {
+	tep_db_query("update " . TABLE_STUDENTS . " set student_moma_status = '" . tep_db_input($student_status) . "' where student_id = '" . $student_id . "' limit 1");
+ }
 
  function change_student_deact_status($student_id, $student_status) {
 	tep_db_query("update " . TABLE_STUDENTS . " set is_deactivated = '" . tep_db_input($student_status) . "' where student_id = '" . $student_id . "' limit 1");

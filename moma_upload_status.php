@@ -26,7 +26,7 @@ if (isset($action) && tep_not_null($action)) {
         case 'edit':
             tep_db_perform(TABLE_STUDENTS, $arr_db_values, "update", "student_id = '" . $student_id . "' and centre_id = '" . $centre_id . "'");
 
-            change_student_status($student_id, '1');
+            change_student_moma_status($student_id, '1');
 
             $msg = 'moma_stage1_uploaded_edited';
             break;
@@ -47,7 +47,7 @@ if (isset($action) && tep_not_null($action)) {
 if ($_GET['actionType'] == "edit") {
     $int_id = $_GET['int_id'];
 
-    $info_query_raw = "select student_id, centre_id, course_id, moma_stage1_uploaded, moma_sdms_number, moma_stage2_uploaded, student_status from " . TABLE_STUDENTS . " where student_id='" . $int_id . "' and is_deactivated != '1' ";
+    $info_query_raw = "select student_id, centre_id, course_id, moma_stage1_uploaded, moma_sdms_number, moma_stage2_uploaded, student_moma_status from " . TABLE_STUDENTS . " where student_id='" . $int_id . "' and is_deactivated != '1' ";
 
     if ($_SESSION['sess_adm_type'] != 'ADMIN') {
         $info_query_raw .= " and centre_id = '" . $_SESSION['sess_centre_id'] . "'";
@@ -74,7 +74,7 @@ if ($_GET['actionType'] == "edit") {
                 $.validator.messages.required = "";
                 $("#frmDetails").validate();
 
-            <?php if ($info['student_status'] == '1') { ?>
+            <?php if ($info['student_moma_status'] == '1') { ?>
                     $('#frmDetails input, #frmDetails select, #frmDetails textarea, #frmDetails button').attr('disabled', true);
             <?php } ?>
             });
@@ -188,7 +188,7 @@ if ($_GET['actionType'] == "edit") {
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
-                                                                        <?php if ($info['student_status'] == '0') { ?>
+                                                                        <?php if ($info['student_moma_status'] == '0') { ?>
                                                                             <table cellpadding="5" cellspacing="4" border="0" width="100%" align="center">
                                                                                 <tr>
                                                                                     <td>&nbsp;<input type="submit" value="UPADTE" name="cmdSubmit" id="cmdSubmit" class="groovybutton">&nbsp;&nbsp;&nbsp;<input type="reset" value="RESET" name="cmdReg" id="cmdReg" class="groovybutton">
