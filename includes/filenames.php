@@ -29,6 +29,7 @@
 	define('FILENAME_BANK_ACCOUNT_STATUS', 'bank_account_status.php');
 	define('FILENAME_AADHAR_CARD_STATUS', 'aadhar_card_status.php');
 	define('FILENAME_NSDC_UPLOAD_STATUS', 'nsdc_upload_status.php');
+	define('FILENAME_MOMA_UPLOAD_STATUS', 'moma_upload_status.php');
 	define('FILENAME_CED_PORTAL_STATUS', 'ced_portal_status.php');
 	define('FILENAME_NON_RES_ALLOWANCE', 'non_res_allowance.php');
 	define('FILENAME_PLACEMENT_ALLOWANCE', 'placement_allowance.php');
