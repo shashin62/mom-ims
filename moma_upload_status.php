@@ -10,7 +10,6 @@ if (isset($action) && tep_not_null($action)) {
     $centre_id = $_SESSION['sess_centre_id'];
 
     $moma_stage1_uploaded = tep_db_prepare_input($_POST['moma_stage1_uploaded']);
-    $moma_sdms_number = tep_db_prepare_input($_POST['moma_sdms_number']);
     $moma_stage2_uploaded = tep_db_prepare_input($_POST['moma_stage2_uploaded']);
 
     $moma_stage1_uploaded = ($moma_stage1_uploaded == '1' ? '1' : '0');
@@ -18,7 +17,6 @@ if (isset($action) && tep_not_null($action)) {
 
     $arr_db_values = array(
         'moma_stage1_uploaded' => $moma_stage1_uploaded,
-        'moma_sdms_number' => $moma_sdms_number,
         'moma_stage2_uploaded' => $moma_stage2_uploaded
     );
 
@@ -33,7 +31,6 @@ if (isset($action) && tep_not_null($action)) {
         case 'delete':
             $arr_db_values = array(
                 'moma_stage1_uploaded' => '0',
-                'moma_sdms_number' => '',
                 'moma_stage2_uploaded' => '0'
             );
 
@@ -47,7 +44,7 @@ if (isset($action) && tep_not_null($action)) {
 if ($_GET['actionType'] == "edit") {
     $int_id = $_GET['int_id'];
 
-    $info_query_raw = "select student_id, centre_id, course_id, moma_stage1_uploaded, moma_sdms_number, moma_stage2_uploaded, student_moma_status from " . TABLE_STUDENTS . " where student_id='" . $int_id . "' and is_deactivated != '1' ";
+    $info_query_raw = "select student_id, centre_id, course_id, moma_stage1_uploaded, moma_stage2_uploaded, student_moma_status from " . TABLE_STUDENTS . " where student_id='" . $int_id . "' and is_deactivated != '1' ";
 
     if ($_SESSION['sess_adm_type'] != 'ADMIN') {
         $info_query_raw .= " and centre_id = '" . $_SESSION['sess_centre_id'] . "'";
@@ -156,13 +153,8 @@ if ($_GET['actionType'] == "edit") {
                                                                                                             <td class="arial12LGrayBold" align="right">&nbsp;STAGE 1 UPLOADED<font color="#ff0000">*</font>&nbsp;:</td>
                                                                                                             <td class="arial12LGrayBold" colspan="5">
                                                                                                                 <?php foreach ($arr_status as $k_status => $v_status) { ?>
-                                                                                                                    <input type="radio" name="moma_stage1_uploaded" id="moma_stage1_uploaded" value="<?php echo $k_status; ?>" class="required" <?php echo ($info['moma_stage1_uploaded'] == $k_status ? 'checked="checked"' : ''); ?>  style="width:auto;" onclick="javascript: toggle_element('moma_stage1_uploaded', 'moma_sdms_number');">&nbsp;<?php echo $v_status; ?>&nbsp;
+                                                                                                                    <input type="radio" name="moma_stage1_uploaded" id="moma_stage1_uploaded" value="<?php echo $k_status; ?>" class="required" <?php echo ($info['moma_stage1_uploaded'] == $k_status ? 'checked="checked"' : ''); ?>  style="width:auto;">&nbsp;<?php echo $v_status; ?>&nbsp;
                                                                                                                 <?php } ?>&nbsp;
-
-                                                                                                                <span class="arial12LGrayBold moma_sdms_number" align="right">
-                                                                                                                    &nbsp;SDMS number&nbsp;<font color="#ff0000">*</font>&nbsp;:
-                                                                                                                    &nbsp;<input type="text" name="moma_sdms_number" id="moma_sdms_number" maxlength="50" value="<?php echo ($dupError ? $_POST['moma_sdms_number'] : $info['moma_sdms_number']) ?>" class="required moma_sdms_number">
-                                                                                                                </span>
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                         <tr>
@@ -173,13 +165,6 @@ if ($_GET['actionType'] == "edit") {
                                                                                                                 <?php } ?>&nbsp;
                                                                                                             </td>
                                                                                                         </tr>
-
-
-                                                                                                        <script type="text/javascript">
-                                                                                                            <!--
-                                                                                                                toggle_element('moma_stage1_uploaded', 'moma_sdms_number');
-                                                                                                            //-->
-                                                                                                        </script>
                                                                                                     </table>
                                                                                                 </fieldset>
                                                                                             </td>
