@@ -173,7 +173,7 @@ if ($_GET['actionType'] == "edit") {
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
-                                                                        <?php if ($info['student_moma_status'] == '0') { ?>
+                                                                        <?php //if ($info['student_moma_status'] == '0') { ?>
                                                                             <table cellpadding="5" cellspacing="4" border="0" width="100%" align="center">
                                                                                 <tr>
                                                                                     <td>&nbsp;<input type="submit" value="UPDATE" name="cmdSubmit" id="cmdSubmit" class="groovybutton">&nbsp;&nbsp;&nbsp;<input type="reset" value="RESET" name="cmdReg" id="cmdReg" class="groovybutton">
@@ -184,7 +184,7 @@ if ($_GET['actionType'] == "edit") {
                                                                                     <td >&nbsp;</td>
                                                                                 <tr>
                                                                             </table>
-                                                                        <?php } ?>
+                                                                        <?php //} ?>
                                                                     </form>
                                                                 </td>
                                                             </tr>
