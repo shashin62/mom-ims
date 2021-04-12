@@ -1122,7 +1122,7 @@
 				}
 			}
 		}else if($_POST['form_action'] == 'moma_report'){
-			$isds_cols_array = array('S. No.', 'center', 'Batch No/Code', 'Batch Disctrict', 'sector', 'Course Name', 'Course Type Residential/Non Residential', 'Batch Start Date', 'Batch End Date', 'Batch Status Completed/ In Progress', 'Candidate First Name', 'Candidate Last Name', 'Date of Birth (DD-MM-YYYY)', 'Father First Name', 'Father Last Name', 'Aadhaar Enrollment Number', 'Aadhaar Number', 'Gender', 'Category SC/ST/BC/OTHERS', 'Physical Disability (Y/N)', 'Religion', 'Candidate State', 'Candidate District', 'Candidate Pin Code', 'Mobile No of Candidate', 'Pre Training Status Employed (Y/N)', 'Total Work Experience', 'Prior Training Earning', 'Education Qualification', 'Total Days Attended', '% Day of Attended','Certified (Y/N)', 'Certification Date (DD-MM-YYYY)', 'Certificate name', 'Certificate no', 'Test Date', 'Testing Agency', 'Assessor', 'Certifying Agency', 'Placement Status (Working/Dropout)', 'Placement Type', 'Letter of Offer/ Declaration Collected (Y/N)', 'Date of Joining (DD-MM-YYYY)', 'Employer Name Or Self Employed', 'Employer Contact Person Name', 'Employer Contact Person Designation', 'Employer Contact No', 'Location of employer State', 'Location of employer District', 'Gross Salary', 'Candidate Bank Name', 'Candidate Branch Address', 'Candidate Ifsc Code', 'Candidate Bank Account Number', 'MOMA Stage 1 uploaded (Y/N)','MOMA Stage 2 uploaded (Y/N)','CED Portal Stage 1','CED Portal Stage 1 Date','CED Portal Stage 2','CED Portal Stage 2 Date');
+			$isds_cols_array = array('S. No.', 'center', 'Batch No/Code', 'Batch Disctrict', 'sector', 'Course Name', 'Course Type Residential/Non Residential', 'Batch Start Date', 'Batch End Date', 'Batch Status Completed/ In Progress', 'Candidate First Name', 'Candidate Last Name', 'Date of Birth (DD-MM-YYYY)', 'Father First Name', 'Father Last Name', 'Aadhaar Enrollment Number', 'Aadhaar Number', 'Gender', 'Category SC/ST/BC/OTHERS', 'Physical Disability (Y/N)', 'Religion', 'Candidate State', 'Candidate District', 'Candidate Pin Code', 'Mobile No of Candidate', 'Pre Training Status Employed (Y/N)', 'Total Work Experience', 'Prior Training Earning', 'Education Qualification', 'Total Days Attended', '% Day of Attended','Certified (Y/N)', 'Certification Date (DD-MM-YYYY)', 'Certificate name', 'Certificate no', 'Test Date', 'Testing Agency', 'Assessor', 'Certifying Agency', 'Placement Status (Working/Dropout)', 'Placement Type', 'Letter of Offer/ Declaration Collected (Y/N)', 'Date of Joining (DD-MM-YYYY)', 'Employer Name Or Self Employed', 'Employer Contact Person Name', 'Employer Contact Person Designation', 'Employer Contact No', 'Location of employer State', 'Location of employer District', 'Gross Salary', 'Candidate Bank Name', 'Candidate Branch Address', 'Candidate Ifsc Code', 'Candidate Bank Account Number', 'NSDC Stage 1 uploaded (Y/N)','NSDC Stage 2 uploaded (Y/N)','CED Portal Stage 1','CED Portal Stage 1 Date','CED Portal Stage 2','CED Portal Stage 2 Date', 'MOMA Stage 1 uploaded (Y/N)','MOMA Stage 2 uploaded (Y/N)');
 
 			$rows = 1;
 			$cnt_cols = 0;
@@ -1160,7 +1160,7 @@
 			$rows = 2;
 			
 			while($batch = tep_db_fetch_array($batch_query)){
-				$students_query_raw = "select student_id, course_id, course_option, stage1_uploaded, stage2_uploaded, student_full_name, student_surname, student_dob, student_father_name,father_surname, is_student_aadhar_card, student_aadhar_card, student_gender, student_category, is_physical_disability, student_religion, student_state, student_district, student_pincode, student_mobile, is_unemployed, student_total_exp, student_income, student_qualification, is_certificate_recieved, certificate_date, certificate_name, certificate_number, test_allotted_date, test_agency, assessor_name, certificate_body_name, student_bank_name, student_branch, bank_ifsc_code, student_account_number, stage1_ced_portal, stage1_ced_portal_date, stage2_ced_portal, stage2_ced_portal_date from  " . TABLE_STUDENTS . " where batch_id = '" . $batch['batch_id'] . "'";
+				$students_query_raw = "select student_id, course_id, course_option, stage1_uploaded, stage2_uploaded, student_full_name, student_surname, student_dob, student_father_name,father_surname, is_student_aadhar_card, student_aadhar_card, student_gender, student_category, is_physical_disability, student_religion, student_state, student_district, student_pincode, student_mobile, is_unemployed, student_total_exp, student_income, student_qualification, is_certificate_recieved, certificate_date, certificate_name, certificate_number, test_allotted_date, test_agency, assessor_name, certificate_body_name, student_bank_name, student_branch, bank_ifsc_code, student_account_number, stage1_ced_portal, stage1_ced_portal_date, stage2_ced_portal, stage2_ced_portal_date, moma_stage1_uploaded, moma_stage2_uploaded from  " . TABLE_STUDENTS . " where batch_id = '" . $batch['batch_id'] . "'";
 
 				$students_query = tep_db_query($students_query_raw);
 
@@ -1332,6 +1332,11 @@
 					$alphabet++;
 					
 					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, display_valid_date($students['stage2_ced_portal_date']));
+                                        
+                                        $alphabet++;
+                                        $objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['moma_stage1_uploaded'] == '1' ? 'Y' : 'N'));
+					$alphabet++;
+					$objPHPExcel->getActiveSheet()->setCellValue($alphabet . $rows, ($students['moma_stage2_uploaded'] == '1' ? 'Y' : 'N'));
 
 					$sr_no++;
 					$rows++;
