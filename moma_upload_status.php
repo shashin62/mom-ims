@@ -72,7 +72,7 @@ if ($_GET['actionType'] == "edit") {
                 $("#frmDetails").validate();
 
             <?php if ($info['student_moma_status'] == '1') { ?>
-                    $('#frmDetails input, #frmDetails select, #frmDetails textarea, #frmDetails button').attr('disabled', true);
+                    //$('#frmDetails input, #frmDetails select, #frmDetails textarea, #frmDetails button').attr('disabled', true);
             <?php } ?>
             });
 
